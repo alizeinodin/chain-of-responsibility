@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('amount');
-            $table->string('status');
+            $table->string('status')->default('pending');
             $table->foreignIdFor(\App\Models\Order::class);
             $table->timestamps();
         });
