@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('amount');
             $table->string('status');
+            $table->foreignIdFor(\App\Models\Order::class);
             $table->timestamps();
         });
     }
