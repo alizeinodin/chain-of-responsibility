@@ -15,4 +15,9 @@ class Order extends Model
     protected $casts = [
         'status' => OrderStatus::class,
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
