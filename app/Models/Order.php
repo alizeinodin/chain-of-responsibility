@@ -32,15 +32,4 @@ class Order extends Model
     {
         return $this->hasMany(Transaction::class);
     }
-
-    public function getTotalAmount(): int
-    {
-        $total = 0;
-
-        array_map(function ($product) use ($total) {
-            $total += $product->cost;
-        }, $this->products);
-
-        return $total;
-    }
 }
