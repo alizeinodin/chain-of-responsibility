@@ -18,10 +18,9 @@ class CreditChecking
     public function handle(Request $request, Closure $next): Response
     {
         if (!($request->user()->credit >= $request->product->cost)) {
-            return response()
-                ->json([
-                    'message' => 'Not enough credit, please charge it!'
-                ], Response::HTTP_FORBIDDEN);
+            return json_response([
+                'message' => 'Not enough credit, please charge it!'
+            ], Response::HTTP_FORBIDDEN);
         }
         return $next($request);
     }

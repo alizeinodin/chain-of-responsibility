@@ -20,9 +20,8 @@ class ProductExists
         if ($request->product->number >= 0)
             return $next($request);
 
-        return \response()
-            ->json([
-                'message' => 'This product is not exists!',
-            ], Response::HTTP_FORBIDDEN);
+        return json_response([
+            'message' => 'This product is not exists!',
+        ], Response::HTTP_FORBIDDEN);
     }
 }

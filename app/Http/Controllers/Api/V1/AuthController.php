@@ -37,7 +37,7 @@ class AuthController extends Controller
             'message' => $user->firstname . ' ' . __('welcome to application'),
         ];
 
-        return response()->json($response, Response::HTTP_CREATED);
+        return json_response($response, Response::HTTP_CREATED);
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -55,14 +55,12 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
             ];
 
-            return response()
-                ->json($response, Response::HTTP_OK);
+            return json_response($response, Response::HTTP_OK);
         }
 
-        return response()
-            ->json([
-                'message' => 'The provided credentials are incorrect.',
-            ], Response::HTTP_FORBIDDEN);
+        return json_response([
+            'message' => 'The provided credentials are incorrect.',
+        ], Response::HTTP_FORBIDDEN);
     }
 
     public function logout(Request $request)
@@ -73,7 +71,6 @@ class AuthController extends Controller
             'message' => 'You have successfully logged out!',
         ];
 
-        return response()
-            ->json($response, Response::HTTP_NO_CONTENT);
+        return json_response($response, Response::HTTP_NO_CONTENT);
     }
 }

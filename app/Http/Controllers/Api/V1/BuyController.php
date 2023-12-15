@@ -12,7 +12,6 @@ use App\Repository\Class\ProductRepository;
 use App\Repository\Class\TransactionRepository;
 use App\Repository\Class\UserRepository;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class BuyController extends Controller
 {
@@ -45,10 +44,9 @@ class BuyController extends Controller
 
         dispatch(new SendSMS($request->user()->phone));
 
-        return response()
-            ->json([
-                'message' => 'Your order is on processing status',
-                'order' => $order,
-            ]);
+        return json_response([
+            'message' => 'Your order is on processing status',
+            'order' => $order,
+        ]);
     }
 }
