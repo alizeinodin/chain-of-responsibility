@@ -34,7 +34,11 @@ Route::name('buy.')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::controller(BuyController::class)->group(function () {
             Route::get('/buy/{product}', 'buy')
-                ->name('buy');
+                ->name('buy')
+                ->middleware([
+                    'product.exists',
+                    'credit.check',
+                ]);
         });
     });
 });
