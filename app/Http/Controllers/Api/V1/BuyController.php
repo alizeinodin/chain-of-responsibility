@@ -35,8 +35,8 @@ class BuyController extends Controller
             'status' => TransactionStatus::ACCEPTED,
         ]);
 
-        $this->orderRepository->updateStatus($order, OrderStatus::PROCESSING);
         $this->orderRepository->addTransaction($order, $transaction);
+        $this->orderRepository->updateStatus($order, OrderStatus::PROCESSING);
 
         $this->productRepository->decrease($product);
 
