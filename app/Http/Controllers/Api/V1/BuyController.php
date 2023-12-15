@@ -6,39 +6,42 @@ use App\Http\Controllers\Controller;
 use App\Http\Enum\OrderStatus;
 use App\Http\Enum\TransactionStatus;
 use App\Jobs\SendSMS;
-use App\Models\Order;
 use App\Models\Product;
-use App\Models\Transaction;
+use App\Repository\Class\OrderRepository;
+use App\Repository\Class\ProductRepository;
+use App\Repository\Class\TransactionRepository;
+use App\Repository\Class\UserRepository;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class BuyController extends Controller
 {
+    public function __construct(
+        private readonly UserRepository        $userRepository,
+        private readonly TransactionRepository $transactionRepository,
+        private readonly OrderRepository       $orderRepository,
+        private readonly ProductRepository     $productRepository,
+    )
+    {
+    }
+
     public function buy(Request $request, Product $product)
     {
-        if (!($request->user()->credit >= $product->cost)) {
-            return response()
-                ->json([
-                    'message' => 'Not enough credit, please charge it!'
-                ], Response::HTTP_FORBIDDEN);
-        }
+        $order = $this->orderRepository->create($request->user());
 
-        $order = Order::create([
-            'order' => OrderStatus::PENDING,
+        $this->orderRepository->addProduct($order, $product);
+
+        $transaction = $this->transactionRepository->create($order, [
+            'amount' => $product->cost,
+            'status' => TransactionStatus::ACCEPTED,
         ]);
 
-        $order->products()->add($product);
+        $this->orderRepository->updateStatus($order, OrderStatus::PROCESSING);
+        $this->orderRepository->addTransaction($order, $transaction);
 
-        $transaction = Transaction::create([
-            'amount' => $order->getTotalAmount(),
-            'order' => TransactionStatus::ACCEPTED,
-        ]);
+        $this->productRepository->decrease($product);
 
-        $order->status = OrderStatus::PROCESSING;
-        $order->transactions()->add($transaction);
-        $order->save();
-
-        $request->user()->credit -= $order->getTotalAmount();
+        $this->userRepository->decreaseCredit(\request()->user(), $product->cost);
 
         dispatch(new SendSMS($request->user()->phone));
 
