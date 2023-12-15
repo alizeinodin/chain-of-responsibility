@@ -14,7 +14,7 @@ This is educational software. In this application, I used `laravel/sail`. So for
 - How to design models and work with database
 - How to use the Repository pattern
 - How to Create a helper function
-- How to Working with controller and middleware
+- How to work with controller and middleware
 
 ## Requirements
 
