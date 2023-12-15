@@ -17,6 +17,6 @@ class FirstSmsProvider extends SmsProviderAbstract
             Log::channel('sms')
                 ->info("Thank you {$phoneNumber} from first");
 
-        return false;
+        return $response->ok();
     }
 }
