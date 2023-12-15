@@ -25,15 +25,16 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $validatedData['firstname'] . ' ' . $validatedData['lastname'],
             'email' => $validatedData['email'],
+            'phone' => $validatedData['phone'],
             'password' => bcrypt($validatedData['password']),
         ]);
 
-        $token = $user->createToken('access_token')->accessToken;
+        $token = $user->createToken('access_token')->plainTextToken;
 
         $response = [
             'user' => $user,
             'accessToken' => $token,
-            'message' => $user->firstname . ' ' . __('welcome', 'Welcome to app'),
+            'message' => $user->firstname . ' ' . __('welcome to application'),
         ];
 
         return response()->json($response, Response::HTTP_CREATED);
