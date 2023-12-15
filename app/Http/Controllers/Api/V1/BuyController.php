@@ -47,7 +47,7 @@ class BuyController extends Controller
 
         return response()
             ->json([
-                'message' => 'Thank you for buying',
+                'message' => 'Your order is on processing status',
                 'order' => $order,
             ]);
     }
